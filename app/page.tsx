@@ -1,10 +1,10 @@
 "use client"
 import Image from "next/image"
-
-import { useState, useEffect } from "react"
+import emailjs from "@emailjs/browser"
+import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { motion, useMotionValue, useSpring } from "framer-motion"
-import { Check, ChevronRight, Menu, X, Moon, Sun, ArrowRight, Star, Brain, Shield, Users, BarChart, Globe, Video, Zap, Target, Award, Building2, Rocket, GraduationCap, Gavel } from 'lucide-react'
+import { Check, ChevronRight, Menu, X, Moon, Sun, ArrowRight, Star, Brain, Shield, Users, BarChart, Globe, Video, Zap, Target, Award, Building2, Rocket, GraduationCap, Gavel, Upload, Mic } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Badge } from "@/components/ui/badge"
@@ -12,18 +12,52 @@ import { Card, CardContent } from "@/components/ui/card"
 import { useTheme } from "next-themes"
 import { useMotionTemplate } from "framer-motion"
 import FloatingPaths from "@/components/FloatingPaths"
-import { FaTwitter, FaLinkedin, FaInstagram, FaFacebook } from "react-icons/fa"
 
 
 
 export default function HiringMindsLanding() {
 
-  const icons = [
-    { icon: <FaTwitter className="text-[#1DA1F2]"  />, link: "https://twitter.com" },
-    { icon: <FaLinkedin className="text-[#0077B5]" />, link: "https://linkedin.com" },
-    { icon: <FaInstagram  className="text-pink-500"/>, link: "https://instagram.com" },
-    { icon: <FaFacebook className="text-[#1877F2]" />, link: "https://facebook.com" },
-  ]
+  
+
+    const formRef = useRef<HTMLFormElement>(null)
+    const [loading, setLoading] = useState(false)
+    const [success, setSuccess] = useState(false)
+
+    const sendEmail = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault()
+      setLoading(true)
+
+      if (!formRef.current) return
+
+      const formData = new FormData(formRef.current)
+      const data = Object.fromEntries(formData.entries())
+
+      try {
+        await emailjs.send(
+          "service_ppr4nfi",
+          "template_2xr7xma",
+          data,
+          "CCMXAHrlxCjIglUy0"
+        )
+
+        await fetch("YOUR_GOOGLE_SCRIPT_URL", {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: { "Content-Type": "application/json" },
+        })
+
+        setSuccess(true)
+        formRef.current.reset() // ✅ Now TS knows this exists
+      } catch (error) {
+        console.error(error)
+        alert("Something went wrong, please try again.")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+
+  
   const [isScrolled, setIsScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const { theme, setTheme } = useTheme()
@@ -372,6 +406,73 @@ export default function HiringMindsLanding() {
           </div>
         </section>
 
+        {/* How It Works Section */}
+        <section id="how-it-works" className="w-full py-20 md:py-32">
+          <div className="container max-w-7xl mx-auto px-6 sm:px-8 lg:px-20">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center mb-16"
+            >
+              <Badge className="mb-4 rounded-full px-4 py-1.5 text-sm font-medium bg-white/10 dark:bg-black/10 border border-black/20 dark:border-white/20 text-black dark:text-white backdrop-blur-sm">
+                How It Works
+              </Badge>
+              <h2 className="text-3xl md:text-5xl font-bold  mb-6 bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 bg-clip-text">
+                Hire in Just 3 Simple Steps
+              </h2>
+              <p className="max-w-3xl mx-auto text-muted-foreground md:text-lg">
+                3 steps, Zero stress - that’s the HiringMinds.ai promise.
+              </p>
+            </motion.div>
+
+            <div className="grid gap-8 md:grid-cols-3">
+              {[
+                {
+                  step: "1",
+                  title: "Upload Job Description",
+                  description: "Recruiters input role details, skills, and experience. AI instantly understands the requirements.",
+                  icon: <Upload className="size-8" />,
+                },
+                {
+                  step: "2",
+                  title: "AI Interviews the Candidate",
+                  description: "Our AI voice agent conducts a real-time, multilingual interview with adaptive questioning.",
+                  icon: <Mic className="size-8" />,
+                },
+                {
+                  step: "3",
+                  title: "Get Instant Results",
+                  description: "Receive detailed analytics, integrity scores, and fit recommendations — instantly.",
+                  icon: <BarChart className="size-8" />,
+                },
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                >
+                  <Card className="h-full text-center p-6 border-black/10 dark:border-white/10 bg-gradient-to-b from-white/50 to-gray-50/50 dark:from-gray-900/50 dark:to-black/50 dark:hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] backdrop-blur-sm hover:shadow-lg transition-all duration-300">
+                    <CardContent className="p-0 flex flex-col items-center">
+                      <div className="size-16 rounded-full bg-gradient-to-br from-black/10 to-gray-800/10 dark:from-white/10 dark:to-gray-200/10 flex items-center justify-center text-black dark:text-white mb-4">
+                        {item.icon}
+                      </div>
+                      <h3 className="text-lg font-bold mb-2 text-black dark:text-white">
+                        Step {item.step}: {item.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground">{item.description}</p>
+                    </CardContent>
+                  </Card>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+
         {/* Target Audience Section */}
         <section className="w-full py-20 md:py-32 ">
           <div className="container max-w-7xl mx-auto px-6 sm:px-8 lg:px-20">
@@ -616,67 +717,85 @@ export default function HiringMindsLanding() {
         </section>
 
         {/* CTA Section */}
-      <section className="w-full py-20 md:py-32  dark:to-white/5 relative overflow-hidden">
-  
-      <div className="container px-4 md:px-6 relative">
-      <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      className="text-center space-y-8"
-     >
-      <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 bg-clip-text">
-        Ready to Transform Your Hiring?
-      </h2>
-      <p className="mx-auto max-w-2xl text-muted-foreground md:text-xl">
-        Join the waitlist and be among the first to experience the future of AI-powered recruitment.
-      </p>
-      <div className="flex flex-col sm:flex-row gap-4 justify-center">
-        <Button size="lg" className="rounded-full h-14 px-8 text-base bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 text-white dark:text-black hover:opacity-90">
-          Join Waitlist Now
-          <ArrowRight className="ml-2 size-5" />
-        </Button>
-        <Button size="lg" variant="outline" className="rounded-full h-14 px-8 text-base border-black/20 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5">
-          Schedule Demo
-        </Button>
-      </div>
-      <p className="text-sm text-muted-foreground">
-        🎉 Early access includes free beta period and exclusive launch benefits
-      </p>
-      </motion.div>
-     </div>
-</section>
+            <section className="w-full py-20 md:py-32  dark:to-white/5 relative overflow-hidden">
+        
+            <div className="container px-4 md:px-6 relative">
+            <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center space-y-8"
+          >
+            <h2 className="text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 bg-clip-text">
+              Ready to Transform Your Hiring?
+            </h2>
+            <p className="mx-auto max-w-2xl text-muted-foreground md:text-xl">
+              Join the waitlist and be among the first to experience the future of AI-powered recruitment.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" className="rounded-full h-14 px-8 text-base bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 text-white dark:text-black hover:opacity-90">
+                Join Waitlist Now
+                <ArrowRight className="ml-2 size-5" />
+              </Button>
+              <Button size="lg" variant="outline" className="rounded-full h-14 px-8 text-base border-black/20 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5">
+                Schedule Demo
+              </Button>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              🎉 Early access includes free beta period and exclusive launch benefits
+            </p>
+            </motion.div>
+          </div>
+      </section>
 
-    <section className="w-full py-20 md:py-32  dark:from-gray-900 dark:to-gray-800">
-      <div className="container px-4 md:px-6 text-center space-y-8">
-        <motion.h2
+      {/* Contact Us Section */}
+      <section id="contact" className="w-full py-20 md:py-32">
+      <div className="container max-w-6xl mx-auto px-6 sm:px-8">
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-3xl md:text-5xl font-bold bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 bg-clip-text"
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
         >
-          Connect With Us
-        </motion.h2>
-        <p className="text-muted-foreground max-w-xl mx-auto">
-          Follow us and stay updated with the latest news from HiringMinds.ai
-        </p>
+          <Badge className="mb-4 rounded-full px-4 py-1.5 text-sm font-medium bg-white/10 dark:bg-black/10 border border-black/20 dark:border-white/20 text-black dark:text-white">
+            Contact Us
+          </Badge>
+          <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-6 bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 bg-clip-text">
+            Get in Touch
+          </h2>
+          <p className="max-w-2xl mx-auto text-muted-foreground md:text-lg">
+            Have questions or partnership ideas? Fill out the form and we’ll get back within 24 hours.
+          </p>
+        </motion.div>
 
-        {/* Icons */}
-        <div className="flex flex-wrap gap-10 justify-center text-4xl sm:text-5xl md:text-6xl">
-          {icons.map((item, i) => (
-            <a
-              key={i}
-              href={item.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:scale-110 transition-transform"
-            >
-              {item.icon}
-            </a>
-          ))}
-        </div>
+        <motion.form
+          ref={formRef}
+          onSubmit={sendEmail}
+          className="max-w-3xl mx-auto bg-white/60 dark:bg-gray-900/60 border border-black/10 dark:border-white/10 rounded-2xl shadow-lg p-8 space-y-6 backdrop-blur-sm"
+        >
+          <div className="grid gap-6 md:grid-cols-2">
+            <input name="name" placeholder="Full Name" required className="input" />
+            <input name="email" placeholder="Email Address" type="email" required className="input" />
+          </div>
+          <div className="grid gap-6 md:grid-cols-2">
+            <input name="phone" placeholder="Phone Number" className="input" />
+            <input name="company" placeholder="Company / Organization" className="input" />
+          </div>
+          <textarea name="message" placeholder="Your Message" rows={5} required className="input"></textarea>
+
+          <div className="text-center">
+            <Button size="lg" type="submit" disabled={loading} className="rounded-full h-14 px-8 text-base bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 text-white dark:text-black">
+              {loading ? "Sending..." : "Send Message"}
+              {!loading && <ArrowRight className="ml-2 size-5" />}
+            </Button>
+          </div>
+
+          {success && <p className="text-green-600 text-center">✅ Message sent successfully!</p>}
+        </motion.form>
       </div>
     </section>
+
 
       </main>
 

@@ -59,6 +59,10 @@
   }
 }
 
+.input {
+  @apply w-full px-4 py-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-transparent focus:border-primary focus:ring-2 focus:ring-primary outline-none;
+}
+
 /* Custom cursor effect for dark mode */
 .dark body {
   cursor: none;
