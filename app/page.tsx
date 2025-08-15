@@ -357,7 +357,7 @@ export default function HiringMindsLanding() {
             >
               {features.map((feature, i) => (
                 <motion.div key={i} variants={item}>
-                  <Card className="h-full group hover:shadow-xl transition-all duration-300 border-black/10 dark:border-white/10 bg-gradient-to-b from-white/50 to-gray-50/50 dark:from-gray-900/50 dark:to-black/50 backdrop-blur-sm">
+                  <Card className="h-full group hover:shadow-xl dark:hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] transition-all duration-300 border-black/10 dark:border-white/10 bg-gradient-to-b from-white/50 to-gray-50/50 dark:from-gray-900/50 dark:to-black/50 backdrop-blur-sm">
                     <CardContent className="p-8 flex flex-col h-full">
                       <div className="size-14 rounded-2xl bg-gradient-to-br from-black/10 to-gray-800/10 dark:from-white/10 dark:to-gray-200/10 flex items-center justify-center text-black dark:text-white mb-6 group-hover:scale-110 transition-transform duration-300">
                         {feature.icon}
@@ -389,7 +389,7 @@ export default function HiringMindsLanding() {
               </h2>
             </motion.div>
 
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4 ">
               {[
                 {
                   title: "Startups",
@@ -419,7 +419,7 @@ export default function HiringMindsLanding() {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1 }}
                 >
-                  <Card className="h-full text-center p-6 border-black/10 dark:border-white/10 bg-gradient-to-b from-white/50 to-gray-50/50 dark:from-gray-900/50 dark:to-black/50 backdrop-blur-sm hover:shadow-lg transition-all duration-300">
+                  <Card className="h-full text-center p-6 border-black/10 dark:border-white/10 bg-gradient-to-b from-white/50 to-gray-50/50 dark:from-gray-900/50 dark:to-black/50 dark:hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] backdrop-blur-sm hover:shadow-lg transition-all duration-300">
                     <CardContent className="p-0">
                       <div className="size-12 rounded-xl bg-gradient-to-br from-black/10 to-gray-800/10 dark:from-white/10 dark:to-gray-200/10 flex items-center justify-center text-black dark:text-white mb-4 mx-auto">
                         {audience.icon}
