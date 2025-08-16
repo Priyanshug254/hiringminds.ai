@@ -298,7 +298,7 @@ export default function HiringMindsLanding() {
                 transition={{ delay: 0.3, duration: 0.8 }}
                 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8 bg-gradient-to-r from-black via-gray-800 to-black dark:from-white dark:via-gray-200 dark:to-white bg-clip-text "
               >
-                Revolutionize Hiring with Hiringminds.ai
+                Get Your Next Candidate Hire Within Minutes
               </motion.h1>
 
               <motion.p 
