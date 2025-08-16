@@ -17,7 +17,15 @@ import FloatingPaths from "@/components/FloatingPaths"
 
 export default function HiringMindsLanding() {
 
-  
+   const words = ["weeks", "hours", "minutes"]
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIndex((prev) => (prev + 1) % words.length)
+    }, 2000) // change every 2s
+    return () => clearInterval(interval)
+  }, [])
 
     const formRef = useRef<HTMLFormElement>(null)
     const [loading, setLoading] = useState(false)
@@ -293,13 +301,25 @@ export default function HiringMindsLanding() {
               </motion.div>
 
               <motion.h1 
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.8 }}
-                className="text-2xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8 bg-gradient-to-r from-black via-gray-800 to-black dark:from-white dark:via-gray-200 dark:to-white bg-clip-text "
-              >
-                Get Your Next Candidate Hire Within Minutes
-              </motion.h1>
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.8 }}
+        className="text-2xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8 
+                   bg-gradient-to-r from-black via-gray-800 to-black 
+                   dark:from-white dark:via-gray-200 dark:to-white bg-clip-text text-transparent"
+      >
+        Hire Your Next Candidate Within{" "}
+        <motion.span
+          key={index} // 👈 important so it re-animates when word changes
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          transition={{ duration: 0.6 }}
+          className="text-indigo-600"
+        >
+          {words[index]}
+        </motion.span>
+      </motion.h1>
 
               <motion.p 
                 initial={{ opacity: 0, y: 20 }}
