@@ -4,7 +4,7 @@ import emailjs from "@emailjs/browser"
 import { useState, useEffect, useRef } from "react"
 import Link from "next/link"
 import { motion, useMotionValue, useSpring } from "framer-motion"
-import { Check, ChevronRight, Menu, X, Moon, Sun, ArrowRight, Star, Brain, Shield, Users, BarChart, Globe, Video, Zap, Target, Award, Building2, Rocket, GraduationCap, Gavel, Upload, Mic } from 'lucide-react'
+import { Check, ChevronRight, Menu, X, Moon, Sun, ArrowRight, Star, Brain, Shield, Users, BarChart, Globe, Video, Zap, Target, Award, Building2, Rocket, GraduationCap, Gavel, Upload, Mic, Bot } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Badge } from "@/components/ui/badge"
@@ -17,7 +17,20 @@ import FloatingPaths from "@/components/FloatingPaths"
 
 export default function HiringMindsLanding() {
 
-   const words = ["weeks", "hours", "minutes"]
+  const [showForm, setShowForm] = useState(false)
+  const [name, setName] = useState<string>("")
+  const [email, setEmail] = useState<string>("")
+  const [mobile, setMobile] = useState<string>("")
+  const [submitted, setSubmitted] = useState(false)
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    // TODO: connect with Google Sheets/Mailchimp/DB
+    console.log("User joined waitlist:", { name, email, mobile })
+    setSubmitted(true)
+  }
+  
+  const words = ["weeks", "hours", "minutes"]
   const [index, setIndex] = useState(0)
 
   useEffect(() => {
@@ -125,7 +138,7 @@ export default function HiringMindsLanding() {
     {
       title: "AI-Driven Structured Interviews",
       description: "Automatically generate and conduct personalized interview sessions aligned with job descriptions using generative AI.",
-      icon: <Brain className="size-6" />,
+      icon: <Bot className="size-6" />,
     },
     {
       title: "Cheat Detection & Verification",
@@ -291,9 +304,13 @@ export default function HiringMindsLanding() {
               className="text-center max-w-4xl mx-auto mb-12"
             >
               <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2 }}
+                animate={{ y: [0, -10, 0] }}
+                  transition={{
+                    repeat: Infinity,
+                    repeatType: "loop",
+                    duration: 1,
+                    ease: "easeInOut",
+                  }}
               >
                 <Badge className="mb-6 rounded-full px-6 py-2 text-sm font-medium bg-white/10 dark:bg-black/10 border border-black/20 dark:border-white/20 text-black dark:text-white backdrop-blur-sm">
                   🚀 Launching September 1, 2025
@@ -301,25 +318,25 @@ export default function HiringMindsLanding() {
               </motion.div>
 
               <motion.h1 
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.8 }}
-        className="text-2xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8 
-                   bg-gradient-to-r from-black via-gray-800 to-black 
-                   dark:from-white dark:via-gray-200 dark:to-white bg-clip-text text-transparent"
-      >
-        Hire Your Next Candidate Within{" "}
-        <motion.span
-          key={index} // 👈 important so it re-animates when word changes
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.6 }}
-          className="text-indigo-600"
-        >
-          {words[index]}
-        </motion.span>
-      </motion.h1>
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.8 }}
+                className="text-2xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-8 
+                          bg-gradient-to-r from-black via-gray-800 to-black 
+                          dark:from-white dark:via-gray-200 dark:to-white bg-clip-text text-transparent"
+                >
+                Hire Your Next Candidate Within{" "}
+                <motion.span
+                  key={index} // 👈 important so it re-animates when word changes
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.6 }}
+                  className="text-indigo-600"
+                >
+                  {words[index]}
+                </motion.span>
+              </motion.h1>
 
               <motion.p 
                 initial={{ opacity: 0, y: 20 }}
@@ -336,7 +353,7 @@ export default function HiringMindsLanding() {
                 transition={{ delay: 0.7 }}
                 className="flex flex-col sm:flex-row gap-4 justify-center mb-8"
               >
-                <Button size="lg" className="rounded-full h-14 px-8 text-base bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 text-white dark:text-black hover:opacity-90">
+                <Button onClick={() => setShowForm(true)} size="lg" className="rounded-full h-14 px-8 text-base bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 text-white dark:text-black hover:opacity-90">
                   Join Waitlist
                   <ArrowRight className="ml-2 size-5" />
                 </Button>
@@ -368,6 +385,8 @@ export default function HiringMindsLanding() {
               </motion.div>
             </motion.div>
 
+            
+
             {/* Hero visual element */}
             <motion.div
               initial={{ opacity: 0, y: 40 }}
@@ -388,6 +407,76 @@ export default function HiringMindsLanding() {
           </div>
         </section>
 
+       {/* Waitlist Popup */}
+      {showForm && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/60 z-50 px-4">
+          <div className="relative bg-white dark:bg-gray-900 rounded-2xl p-8 shadow-lg w-full max-w-md mx-auto">
+            
+            {/* Top-right Close (X) */}
+            <button
+              onClick={() => setShowForm(false)}
+              className="absolute top-3 right-3 text-gray-500 hover:text-black dark:hover:text-white"
+            >
+              <X size={24} />
+            </button>
+
+            {!submitted ? (
+              <>
+                <h2 className="text-2xl font-semibold mb-4 text-center">Join the Waitlist</h2>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                  <input
+                    type="text"
+                    required
+                    value={name}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
+                    placeholder="Enter your name"
+                    className="p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-transparent"
+                  />
+
+                  <input
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
+                    placeholder="Enter your email"
+                    className="p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-transparent"
+                  />
+
+                  <input
+                    type="tel"
+                    required
+                    value={mobile}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setMobile(e.target.value)}
+                    placeholder="Enter your mobile number"
+                    className="p-3 rounded-lg border border-gray-300 dark:border-gray-700 bg-transparent"
+                  />
+
+                  <button
+                    type="submit"
+                    className="px-4 py-2 rounded-lg bg-black text-white dark:bg-white dark:text-black hover:scale-105 transition"
+                  >
+                    Submit
+                  </button>
+                </form>
+              </>
+            ) : (
+              <div className="text-center">
+                <h2 className="text-xl font-bold mb-2">🎉 Thank You!</h2>
+                <p>You’ve joined the waitlist. We’ll notify you at launch.</p>
+              </div>
+            )}
+
+            {/* Bottom Close button */}
+            <button
+              onClick={() => setShowForm(false)}
+              className="mt-6 w-full text-sm text-gray-500 hover:underline"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
         {/* Features Section */}
         <section id="features" className="w-full py-20 md:py-32">
           <div className="container max-w-7xl mx-auto px-6 sm:px-8 lg:px-20">
@@ -402,7 +491,7 @@ export default function HiringMindsLanding() {
                 Features
               </Badge>
               <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-6 bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 bg-clip-text">
-                Intelligent Recruitment Solutions
+                What We Provide
               </h2>
               <p className="max-w-3xl mx-auto text-muted-foreground md:text-lg">
               HiringMinds.ai transforms recruitment with intelligent automation, delivering faster, fairer, and smarter hiring decisions.</p>
@@ -793,7 +882,7 @@ export default function HiringMindsLanding() {
               Join the waitlist and be among the first to experience the future of AI-powered recruitment.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="rounded-full h-14 px-8 text-base bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 text-white dark:text-black hover:opacity-90">
+              <Button onClick={() => setShowForm(true)} size="lg" className="rounded-full h-14 px-8 text-base bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 text-white dark:text-black hover:opacity-90">
                 Join Waitlist Now
                 <ArrowRight className="ml-2 size-5" />
               </Button>
