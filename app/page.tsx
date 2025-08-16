@@ -191,7 +191,7 @@ export default function HiringMindsLanding() {
           </motion.div>
 
           <nav className="hidden md:flex gap-8">
-            {["Features", "Pricing", "About", "FAQ"].map((item, i) => (
+            {["Product", "Features", "Pricing", "About", "FAQ"].map((item, i) => (
               <motion.div
                 key={item}
                 initial={{ opacity: 0, y: -10 }}
@@ -199,7 +199,7 @@ export default function HiringMindsLanding() {
                 transition={{ delay: i * 0.1 }}
               >
                 <Link
-                  href={`#${item.toLowerCase()}`}
+                  href={item === "Product" ? "/product" : `#${item.toLowerCase()}`}
                   className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors relative group"
                 >
                   {item}
@@ -215,12 +215,16 @@ export default function HiringMindsLanding() {
               <span className="sr-only">Toggle theme</span>
             </Button>
             <Link
-              href="#"
+              href="#" 
               className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
               Sign In
             </Link>
-            <Button className="rounded-full bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 text-white dark:text-black hover:opacity-90">
+            <Button onClick={()=>{
+              const section =document.getElementById("contact");
+              section?.scrollIntoView({behavior:"smooth"});
+            }} 
+            className="rounded-full bg-gradient-to-r from-black to-gray-800 dark:from-white dark:to-gray-200 text-white dark:text-black hover:opacity-90">
               Get Early Access
               <ChevronRight className="ml-1 size-4" />
             </Button>
@@ -245,10 +249,10 @@ export default function HiringMindsLanding() {
             className="md:hidden absolute top-16 inset-x-0 bg-background/95 dark:bg-black/95 backdrop-blur-xl border-b border-border/20"
           >
             <div className="container py-4 flex flex-col gap-4">
-              {["Features", "Pricing", "About", "FAQ"].map((item) => (
+              {["Product", "Features", "Pricing", "About", "FAQ"].map((item) => (
                 <Link
                   key={item}
-                  href={`#${item.toLowerCase()}`}
+                  href={item === "Product" ? "/product" : `#${item.toLowerCase()}`}
                   className="py-2 text-sm font-medium hover:text-primary transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
@@ -316,9 +320,11 @@ export default function HiringMindsLanding() {
                   Join Waitlist
                   <ArrowRight className="ml-2 size-5" />
                 </Button>
+                <Link href="/product">
                 <Button size="lg" variant="outline" className="rounded-full h-14 px-8 text-base border-black/20 dark:border-white/20 hover:bg-black/5 dark:hover:bg-white/5">
                   Watch Demo
                 </Button>
+                </Link>
               </motion.div>
 
               <motion.div 
@@ -457,13 +463,17 @@ export default function HiringMindsLanding() {
                 >
                   <Card className="h-full text-center p-6 border-black/10 dark:border-white/10 bg-gradient-to-b from-white/50 to-gray-50/50 dark:from-gray-900/50 dark:to-black/50 dark:hover:shadow-[0_0_20px_rgba(255,255,255,0.1)] backdrop-blur-sm hover:shadow-lg transition-all duration-300">
                     <CardContent className="p-0 flex flex-col items-center">
+                      <span className="text-lg font-bold text-black dark:text-white mb-2">
+                          Step {item.step}
+                        </span>
+                      
                       <div className="size-16 rounded-full bg-gradient-to-br from-black/10 to-gray-800/10 dark:from-white/10 dark:to-gray-200/10 flex items-center justify-center text-black dark:text-white mb-4">
                         {item.icon}
                       </div>
                       <h3 className="text-lg font-bold mb-2 text-black dark:text-white">
-                        Step {item.step}: {item.title}
+                        {item.title}
                       </h3>
-                      <p className="text-sm text-muted-foreground">{item.description}</p>
+                      <p className="text-sm font-bold text-muted-foreground">{item.description}</p>
                     </CardContent>
                   </Card>
                 </motion.div>
@@ -650,6 +660,36 @@ export default function HiringMindsLanding() {
           </div>
         </section>
 
+        {/* About Us Section */}
+
+          {/* About Us Section */}
+          <section id="about" className="w-full py-20 md:py-32 bg-muted/30 dark:bg-muted/10">
+            <div className="container px-4 md:px-6">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+                className="max-w-3xl mx-auto text-center"
+              >
+                <Badge className="mb-4 rounded-full px-4 py-1.5 text-sm font-medium bg-white/10 dark:bg-black/10 border border-black/20 dark:border-white/20 text-black dark:text-white backdrop-blur-sm">
+                  About Us
+                </Badge>
+                <h2 className="text-3xl md:text-5xl font-bold mb-6">What is HiringMinds.ai?</h2>
+                <br/>
+                <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+                  At <span className="font-semibold">HiringMinds.ai</span>, we’re redefining recruitment 
+                  for a world where talent knows no boundaries. Our mission is simple — to empower businesses 
+                  with intelligent, fair, and inclusive hiring solutions. From startups to enterprises, 
+                  we help you find the right minds, faster.
+                </p>
+              </motion.div>
+            </div>
+          </section>
+
+
+        
+
         {/* FAQ Section */}
         <section id="faq" className="w-full py-20 md:py-32  dark:to-white/5">
           <div className="container px-4 md:px-6">
@@ -747,6 +787,8 @@ export default function HiringMindsLanding() {
             </motion.div>
           </div>
       </section>
+
+      
 
       {/* Contact Us Section */}
       <section id="contact" className="w-full py-20 md:py-32">
